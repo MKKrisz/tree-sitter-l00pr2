@@ -10,6 +10,7 @@
 "from" @keyword.import
 
 "source" @keyword.type
+"filter" @keyword.type
 "playable" @keyword.type
 "sequence" @keyword.type
 "var" @keyword.type

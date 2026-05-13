@@ -12,6 +12,9 @@
       "highlights": [
         "queries/highlights.scm"
       ],
+      "locals": [
+        "queries/locals.scm"
+      ],
       "injection-regex": "^l00pr2$",
       "class-name": "TreeSitterL00pr2"
     }
