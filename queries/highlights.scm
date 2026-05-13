@@ -19,7 +19,7 @@
 
 (var_decl varname:(identifier) @variable)
 (label (":") @punctuation)
-(label (identifier) @variable)
+(label (identifier) @variable (#is-not? local))
 
 (numerical_expr (signless_number) @number.float)
 (numerical_expr prefix:(identifier) @function.call)
