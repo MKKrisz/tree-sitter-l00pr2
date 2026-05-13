@@ -9,6 +9,9 @@
       "file-types": [
         "l2", "tn"
       ],
+      "highlights": [
+        "queries/highlights.scm"
+      ],
       "injection-regex": "^l00pr2$",
       "class-name": "TreeSitterL00pr2"
     }

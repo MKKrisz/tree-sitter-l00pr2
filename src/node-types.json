@@ -132,6 +132,25 @@
     }
   },
   {
+    "type": "explicit_note",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "node",
+          "named": true
+        },
+        {
+          "type": "sequence",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "expr",
     "named": true,
     "fields": {},
@@ -341,11 +360,11 @@
       "required": true,
       "types": [
         {
-          "type": "label",
+          "type": "explicit_note",
           "named": true
         },
         {
-          "type": "note",
+          "type": "label",
           "named": true
         }
       ]
@@ -487,15 +506,46 @@
   {
     "type": "numerical_expr",
     "named": true,
-    "fields": {},
+    "fields": {
+      "constant": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      },
+      "postfix": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      },
+      "prefix": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "numerical_expr",
           "named": true
@@ -506,10 +556,6 @@
         },
         {
           "type": "signless_number",
-          "named": true
-        },
-        {
-          "type": "symbol",
           "named": true
         }
       ]
@@ -518,15 +564,46 @@
   {
     "type": "numerical_expr_no_subtraction",
     "named": true,
-    "fields": {},
+    "fields": {
+      "constant": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      },
+      "postfix": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      },
+      "prefix": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "numerical_expr",
           "named": true
@@ -537,10 +614,6 @@
         },
         {
           "type": "signless_number",
-          "named": true
-        },
-        {
-          "type": "symbol",
           "named": true
         }
       ]
@@ -573,6 +646,10 @@
         },
         {
           "type": "numerical_expr",
+          "named": true
+        },
+        {
+          "type": "pitch",
           "named": true
         },
         {
@@ -651,21 +728,6 @@
     }
   },
   {
-    "type": "pitch",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "signless_number",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "play_command",
     "named": true,
     "fields": {
@@ -684,7 +746,7 @@
         "required": false,
         "types": [
           {
-            "type": "note",
+            "type": "explicit_note",
             "named": true
           }
         ]
@@ -792,15 +854,22 @@
   {
     "type": "set_command",
     "named": true,
-    "fields": {},
+    "fields": {
+      "varname": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "numerical_expr",
           "named": true
@@ -925,15 +994,22 @@
   {
     "type": "var_decl",
     "named": true,
-    "fields": {},
+    "fields": {
+      "varname": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "numerical_expr",
           "named": true
@@ -1052,6 +1128,10 @@
   {
     "type": "import",
     "named": false
+  },
+  {
+    "type": "pitch",
+    "named": true
   },
   {
     "type": "play",

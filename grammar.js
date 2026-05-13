@@ -19,8 +19,10 @@ export default grammar({
     [$.key_value_pair],
     [$.parenthesisless_paramlist],
     [$.play_command, $.node],
+    [$.param, $.node],
     [$.interpolation, $.numerical_expr],
     [$.key_value_pair, $.numerical_expr],
+    [$.param, $.node, $.numerical_expr],
     [$.numerical_expr_no_subtraction, $.numerical_expr],
     [$.numerical_expr_no_subtraction, $.numerical_expr, $.pitch],
   ],
@@ -67,7 +69,7 @@ export default grammar({
 
     var_decl: $ => seq(
       choice('var', 'variable'),
-      $.identifier,
+      field("varname", $.identifier),
       '=',
       $.numerical_expr
     ),
@@ -80,12 +82,14 @@ export default grammar({
       )
     ),
 
-    labeled_note: $ => seq($.label, $.note),
+    labeled_note: $ => seq($.label, $.explicit_note),
 
     note: $ => choice(
       seq($.node, optional($.sequence)),
       $.parenthesisless_paramlist,
     ),
+
+    explicit_note: $ => seq($.node, optional($.sequence)),
 
     sequence_decl: $ => seq(
       'sequence',
@@ -131,7 +135,7 @@ export default grammar({
 
     paramdecl_element: $ => choice(
       seq($.identifier, '=', $.param),
-      seq('const', $.identifier, optional(seq('=', $.const_param)))
+      seq('const', $.identifier, seq('=', $.const_param))
     ),
 
     unknown_decl: $ => seq($.identifier, /.*/),
@@ -143,7 +147,7 @@ export default grammar({
       'play',
       choice(
         field('id_to_play', $.identifier),
-        field('note_to_play', $.note),
+        field('note_to_play', $.explicit_note),
         field('seq_to_play', $.sequence)
       ),
       ',',
@@ -155,7 +159,7 @@ export default grammar({
 
     set_command: $ => seq(
       'set',
-      $.identifier,
+      field('varname', $.identifier),
       $.operation,
       $.numerical_expr
     ),
@@ -210,28 +214,29 @@ export default grammar({
     // --- Numerical Expressions (Precedence handling) ---
     numerical_expr: $ => choice(
       prec(7, seq('(', $.numerical_expr, ')')),
-      prec(6, seq($.identifier, '(', $.numerical_expr, ')')), // prefix_conversion
-      prec.left(5, seq($.numerical_expr, choice($.symbol, $.identifier))), // postfix_conversion
+      prec(6, seq(field("prefix", $.identifier), '(', $.numerical_expr, ')')), // prefix_conversion
+      prec.left(5, seq($.numerical_expr, field("postfix", choice($.symbol, $.identifier)))), // postfix_conversion
       prec.left(4, seq($.numerical_expr, choice('*', '/'), $.numerical_expr)), // div_or_mul
       prec.left(3, seq($.numerical_expr, choice('+', '-'), $.numerical_expr)), // add_or_sub
-      prec(2, $.pitch),
-      prec(1, choice($.identifier, $.symbol)), // constant
+      prec(6, $.pitch),
+      prec(1, field("constant", $.symbol)), // constant
       prec(1, seq(optional(choice('+', '-')), $.signless_number)) // num
     ),
 
     numerical_expr_no_subtraction: $ => choice(
       prec(7, seq('(', $.numerical_expr, ')')),
-      prec(6, seq($.identifier, '(', $.numerical_expr, ')')), // prefix_conversion
-      prec.left(5, seq($.numerical_expr, choice($.symbol, $.identifier))), // postfix_conversion
+      prec(6, seq(field("prefix", $.identifier), '(', $.numerical_expr, ')')), // prefix_conversion
+      prec.left(5, seq($.numerical_expr, field("postfix", choice($.symbol, $.identifier)))), // postfix_conversion
       prec.left(4, seq($.numerical_expr, choice('*', '/'), $.numerical_expr)), // div_or_mul
       prec.left(3, seq($.numerical_expr, '+', $.numerical_expr)), // add_or_sub
-      prec(2, $.pitch),
-      prec(1, choice($.identifier, $.symbol)), // constant
+      prec(1, $.pitch),
+      prec(1, field("constant", $.symbol)), // constant
       prec(1, seq(optional(choice('+', '-')), $.signless_number)) // num
     ),
     // --- Parameters & Interpolation ---
     param: $ => choice(
       $.numerical_expr,
+      $.pitch,
       $.interpolation,
       $.identifier,
       $.string,
@@ -280,7 +285,7 @@ export default grammar({
     input_list: $ => seq(
       '{',
       $.maybe_labeled_tree_node,
-      repeat(seq(';', $.maybe_labeled_tree_node)),
+      repeat(seq(optional(';'), $.maybe_labeled_tree_node)),
       optional(';'),
       '}'
     ),
@@ -292,12 +297,10 @@ export default grammar({
     // --- Tokens ---
     label: $ => seq(':', $.identifier, ':'),
 
-    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_.]*/,
+    identifier: $ => /([a-zA-Z_][a-zA-Z0-9_.]*)/,
 
-    pitch: $ => choice(
-      token(seq(/[A-G]/, optional(choice('#', 'x', 'b', 'bb')), /[0-9]+/)),
-      $.signless_number
-    ),
+    pitch: $ => /[A-G](#|x|b|bb)?[0-9]+/,
+      //token(seq(/[A-G]/, /[0-9]+/)),
 
     signless_number: $ => /[0-9]+(\.[0-9]+)?/,
 

@@ -198,8 +198,12 @@
           ]
         },
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "FIELD",
+          "name": "varname",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
         },
         {
           "type": "STRING",
@@ -279,7 +283,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "note"
+          "name": "explicit_note"
         }
       ]
     },
@@ -310,6 +314,27 @@
         {
           "type": "SYMBOL",
           "name": "parenthesisless_paramlist"
+        }
+      ]
+    },
+    "explicit_note": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "node"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "sequence"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -661,7 +686,7 @@
               "name": "note_to_play",
               "content": {
                 "type": "SYMBOL",
-                "name": "note"
+                "name": "explicit_note"
               }
             },
             {
@@ -709,8 +734,12 @@
           "value": "set"
         },
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "FIELD",
+          "name": "varname",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
         },
         {
           "type": "SYMBOL",
@@ -1036,8 +1065,12 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "identifier"
+                "type": "FIELD",
+                "name": "prefix",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                }
               },
               {
                 "type": "STRING",
@@ -1065,17 +1098,21 @@
                 "name": "numerical_expr"
               },
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "symbol"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "identifier"
-                  }
-                ]
+                "type": "FIELD",
+                "name": "postfix",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "symbol"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "identifier"
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -1142,7 +1179,7 @@
         },
         {
           "type": "PREC",
-          "value": 2,
+          "value": 6,
           "content": {
             "type": "SYMBOL",
             "name": "pitch"
@@ -1152,17 +1189,12 @@
           "type": "PREC",
           "value": 1,
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "symbol"
-              }
-            ]
+            "type": "FIELD",
+            "name": "constant",
+            "content": {
+              "type": "SYMBOL",
+              "name": "symbol"
+            }
           }
         },
         {
@@ -1232,8 +1264,12 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "identifier"
+                "type": "FIELD",
+                "name": "prefix",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                }
               },
               {
                 "type": "STRING",
@@ -1261,17 +1297,21 @@
                 "name": "numerical_expr"
               },
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "symbol"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "identifier"
-                  }
-                ]
+                "type": "FIELD",
+                "name": "postfix",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "symbol"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "identifier"
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -1329,7 +1369,7 @@
         },
         {
           "type": "PREC",
-          "value": 2,
+          "value": 6,
           "content": {
             "type": "SYMBOL",
             "name": "pitch"
@@ -1339,17 +1379,12 @@
           "type": "PREC",
           "value": 1,
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "symbol"
-              }
-            ]
+            "type": "FIELD",
+            "name": "constant",
+            "content": {
+              "type": "SYMBOL",
+              "name": "symbol"
+            }
           }
         },
         {
@@ -1394,6 +1429,10 @@
         {
           "type": "SYMBOL",
           "name": "numerical_expr"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "pitch"
         },
         {
           "type": "SYMBOL",
@@ -1757,8 +1796,16 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "STRING",
-                "value": ";"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": ";"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
               },
               {
                 "type": "SYMBOL",
@@ -1838,61 +1885,11 @@
     },
     "identifier": {
       "type": "PATTERN",
-      "value": "[a-zA-Z_][a-zA-Z0-9_.]*"
+      "value": "([a-zA-Z_][a-zA-Z0-9_.]*)"
     },
     "pitch": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "TOKEN",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "PATTERN",
-                "value": "[A-G]"
-              },
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": "#"
-                      },
-                      {
-                        "type": "STRING",
-                        "value": "x"
-                      },
-                      {
-                        "type": "STRING",
-                        "value": "b"
-                      },
-                      {
-                        "type": "STRING",
-                        "value": "bb"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              },
-              {
-                "type": "PATTERN",
-                "value": "[0-9]+"
-              }
-            ]
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "signless_number"
-        }
-      ]
+      "type": "PATTERN",
+      "value": "[A-G](#|x|b|bb)?[0-9]+"
     },
     "signless_number": {
       "type": "PATTERN",
@@ -1963,11 +1960,20 @@
       "node"
     ],
     [
+      "param",
+      "node"
+    ],
+    [
       "interpolation",
       "numerical_expr"
     ],
     [
       "key_value_pair",
+      "numerical_expr"
+    ],
+    [
+      "param",
+      "node",
       "numerical_expr"
     ],
     [
