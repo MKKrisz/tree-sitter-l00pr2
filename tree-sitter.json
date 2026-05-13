@@ -1,0 +1,42 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "l00pr2",
+      "camelcase": "L00pr2",
+      "title": "l00pr2",
+      "scope": "source.l00pr2",
+      "file-types": [
+        "l2", "tn"
+      ],
+      "injection-regex": "^l00pr2$",
+      "class-name": "TreeSitterL00pr2"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Language for sequencing data (mostly notes) and generating audio",
+    "authors": [
+      {
+        "name": "Magyari Krisztián",
+        "email": "magyarikrisztianbusiness@gmail.com",
+        "url": ""
+      }
+    ],
+    "links": {
+      "repository": "github.com/MKKrisz/l00pr",
+      "funding": ""
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "java": false,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
