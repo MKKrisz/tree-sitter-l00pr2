@@ -9,11 +9,11 @@
 "from" @keyword.import
 
 "source" @keyword.type
-"note" @keyword.type
+"playable" @keyword.type
 "sequence" @keyword.type
 "var" @keyword.type
 "variable" @keyword.type
-"" @keyword.type
+"automation" @keyword.type
 
 (string)  @string
 (comment) @comment
